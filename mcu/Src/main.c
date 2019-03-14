@@ -74,6 +74,8 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   uint32_t i;
+  //DMA_TypeDef* tmpDMA;
+  //#define _NOP do { asm { "nop"; } } while(0)
   #define DAC_BUFFER_SIZE 1024
   uint16_t dac_buffer[DAC_BUFFER_SIZE];
   for (i=0; i < DAC_BUFFER_SIZE; i++) {
@@ -114,13 +116,26 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  //for (i=0; i < DAC_BUFFER_SIZE; i+=2) {
+ //	    dac_buffer[i] = 0xaa;
+ //	    dac_buffer[1+1] = 0x05;
+ //	  }
+
   while (1)
   {
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
-	  for (i=0; i < DAC_BUFFER_SIZE; i++) {
-	    GPIOE->ODR = dac_buffer[i];
-	  }
+	DMA1->HIFCR = 0xFFFFFFFF;
+	DMA1->LIFCR = 0xFFFFFFFF;
+	//tmpDMA = DMA1;
+    HAL_DMA_Start(&hdma_dma_generator7, (uint32_t) dac_buffer, (uint32_t) &(GPIOE->ODR), DAC_BUFFER_SIZE);
+
+	// dummy delay
+	i = 0;
+    while (i < 25000) {
+    	i++;
+    }
   }
   /* USER CODE END 3 */
 }

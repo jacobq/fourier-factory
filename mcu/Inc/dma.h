@@ -28,7 +28,7 @@
 #include "main.h"
 
 /* DMA memory to memory transfer handles -------------------------------------*/
-extern DMA_HandleTypeDef hdma_dma_generator0;
+extern DMA_HandleTypeDef hdma_dma_generator7;
 
 /* USER CODE BEGIN Includes */
 
