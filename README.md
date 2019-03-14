@@ -11,6 +11,8 @@ a.k.a. Jacob's Jeneric Jenerator (J^3)
 * NUCLEO demo/eval/prototyping boards
   - [Schematics](doc/nucleo/nucleo144-schematics-from-um1974.pdf) (for 144-pin MCU versions)
   - [NUCLEO-H743ZI](https://www.st.com/en/evaluation-tools/nucleo-h743zi.html)
+* [AN4666](https://www.st.com/content/ccc/resource/technical/document/application_note/7a/88/df/e3/d3/36/40/29/DM00169730.pdf/files/DM00169730.pdf/jcr:content/translations/en.DM00169730.pdf)
+  *Parallel synchronous transmission using GPIO and DMA*
   
 ## Software download link(s)
 
