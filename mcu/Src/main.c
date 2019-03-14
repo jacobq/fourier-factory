@@ -73,7 +73,12 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  uint32_t i;
+  #define DAC_BUFFER_SIZE 1024
+  uint16_t dac_buffer[DAC_BUFFER_SIZE];
+  for (i=0; i < DAC_BUFFER_SIZE; i++) {
+	  dac_buffer[i] = (i%2 == 0) ? 0x5555 : 0xAAAA;
+  }
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,13 +100,15 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  //MX_ETH_Init();
-  //MX_USART3_UART_Init();
-  //MX_DAC1_Init();
-  //MX_RNG_Init();
+  MX_ETH_Init();
+  MX_USART3_UART_Init();
+  MX_DAC1_Init();
+  MX_RNG_Init();
   MX_TIM12_Init();
-  //MX_USB_OTG_FS_PCD_Init();
+  MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
+
+
 
   /* USER CODE END 2 */
 
@@ -110,8 +117,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    GPIOE->ODR ^= 0xFFFF;
     /* USER CODE BEGIN 3 */
+	  for (i=0; i < DAC_BUFFER_SIZE; i++) {
+	    GPIOE->ODR = dac_buffer[i];
+	  }
   }
   /* USER CODE END 3 */
 }
