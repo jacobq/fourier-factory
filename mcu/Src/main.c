@@ -95,12 +95,12 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_ETH_Init();
-  MX_USART3_UART_Init();
-  MX_DAC1_Init();
-  MX_RNG_Init();
+  //MX_ETH_Init();
+  //MX_USART3_UART_Init();
+  //MX_DAC1_Init();
+  //MX_RNG_Init();
   MX_TIM12_Init();
-  MX_USB_OTG_FS_PCD_Init();
+  //MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -110,7 +110,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    GPIOE->ODR ^= 0xFFFF;
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
