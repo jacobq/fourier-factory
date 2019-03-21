@@ -20,7 +20,12 @@ a.k.a. Jacob's Jeneric Jenerator (J^3)
 * [System Workbench for STM32: free IDE on Windows, Linux and OS X](https://www.st.com/en/development-tools/sw4stm32.html)
 * [STM32 Flash loader demonstrator (UM0462)](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/flasher-stm32.html)
 
+## Development environment setup notes
 
+Eclipse (AC6 SW4STM32) uses absolute paths in some of its project files (e.g. `.cproject`). There are (at least) two ways to work around this:
+
+* Recreate / re-import the project on each machine
+* Set the environment variable `F3_HOME` equal to the base folder of the project (root of git repository)
 
 [stm32h7-home]: https://www.st.com/en/microcontrollers/stm32h743-753.html?querycriteria=productId=LN2033
 [h743-datasheet]: https://www.st.com/resource/en/datasheet/stm32h743bi.pdf
