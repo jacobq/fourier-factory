@@ -21,10 +21,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dac.h"
-#include "dma.h"
 #include "eth.h"
+#include "hrtim.h"
 #include "rng.h"
-#include "tim.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -96,18 +95,17 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  HAL_HRTIM_MspInit(&hhrtim);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_ETH_Init();
   MX_USART3_UART_Init();
   MX_DAC1_Init();
   MX_RNG_Init();
-  MX_TIM12_Init();
   MX_USB_OTG_FS_PCD_Init();
+  MX_HRTIM_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -126,16 +124,24 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	DMA1->HIFCR = 0xFFFFFFFF;
-	DMA1->LIFCR = 0xFFFFFFFF;
+	//DMA1->HIFCR = 0xFFFFFFFF;
+	//DMA1->LIFCR = 0xFFFFFFFF;
 	//tmpDMA = DMA1;
-    HAL_DMA_Start(&hdma_dma_generator7, (uint32_t) dac_buffer, (uint32_t) &(GPIOE->ODR), DAC_BUFFER_SIZE);
+    //HAL_DMA_Start(&hdma_dma_generator7, (uint32_t) dac_buffer, (uint32_t) &(GPIOE->ODR), DAC_BUFFER_SIZE);
+
+	//GPIOC->ODR ^= 0xFFFF;
+
+	//__HAL_HRTIM_ENABLE(&hhrtim, HRTIM_TIMERID_TIMER_A);
+	 HAL_HRTIM_SimpleOCStart(&hhrtim, HRTIM_TIMERID_TIMER_A, HRTIM_OUTPUT_TA1);
 
 	// dummy delay
-	i = 0;
-    while (i < 25000) {
-    	i++;
+    while (1) {
+    	__NOP();
     }
+	//i = 0;
+    //while (i < 25000) {
+    //	i++;
+    //}
   }
   /* USER CODE END 3 */
 }
@@ -197,11 +203,12 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_RNG
-                              |RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_HRTIM1|RCC_PERIPHCLK_USART3
+                              |RCC_PERIPHCLK_RNG|RCC_PERIPHCLK_USB;
   PeriphClkInitStruct.Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1;
   PeriphClkInitStruct.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
   PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+  PeriphClkInitStruct.Hrtim1ClockSelection = RCC_HRTIM1CLK_TIMCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();

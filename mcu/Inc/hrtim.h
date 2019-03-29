@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : TIM.h
+  * File Name          : HRTIM.h
   * Description        : This file provides code for the configuration
-  *                      of the TIM instances.
+  *                      of the HRTIM instances.
   ******************************************************************************
   * @attention
   *
@@ -17,8 +17,8 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __tim_H
-#define __tim_H
+#ifndef __hrtim_H
+#define __hrtim_H
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -30,15 +30,15 @@
 
 /* USER CODE END Includes */
 
-extern TIM_HandleTypeDef htim12;
+extern HRTIM_HandleTypeDef hhrtim;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
-void MX_TIM12_Init(void);
+void MX_HRTIM_Init(void);
                         
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+void HAL_HRTIM_MspPostInit(HRTIM_HandleTypeDef *hhrtim);
                     
 /* USER CODE BEGIN Prototypes */
 
@@ -47,7 +47,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ tim_H */
+#endif /*__ hrtim_H */
 
 /**
   * @}
