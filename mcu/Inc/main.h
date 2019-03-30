@@ -32,7 +32,14 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+// Based on https://community.st.com/s/article/FAQ-DMA-is-not-working-on-STM32H7-devices
+#if defined( __ICCARM__ )
+  #define DMA_BUFFER \
+      _Pragma("location=\".dma_buffer\"")
+#else
+  #define DMA_BUFFER \
+      __attribute__((section(".dma_buffer")))
+#endif
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -43,11 +50,22 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 
+#define DAC_BUFFER_SIZE 1024
+
+// Sloppy little hack to let hrtim.c reference the buffer address when configuring the DMA
+#ifdef _MAIN_C
+  #define GLOBAL_VAR
+#else
+  #define GLOBAL_VAR extern
+#endif
+
+//GLOBAL_VAR uint16_t dac_buffer_index;
+GLOBAL_VAR DMA_BUFFER uint16_t dac_buffer[DAC_BUFFER_SIZE];
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
@@ -110,6 +128,8 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOB
 #define DATA_0_Pin GPIO_PIN_0
 #define DATA_0_GPIO_Port GPIOE
+#define DATA_1_Pin GPIO_PIN_1
+#define DATA_1_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

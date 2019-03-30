@@ -57,6 +57,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern DAC_HandleTypeDef hdac1;
+extern DMA_HandleTypeDef hdma_hrtim1_a;
 extern TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN EV */
@@ -199,6 +200,30 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32h7xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles DMA1 stream1 global interrupt.
+  */
+void DMA1_Stream1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+  //__NOP();
+
+  // Manually clear half-transfer & transfer complete flags
+  DMA1->LIFCR |= DMA_LIFCR_CHTIF1 | DMA_LIFCR_CTCIF1;
+  DMA1_Stream1->CR |= DMA_SxCR_EN;
+
+  // Quick, manual test for transfer error flag
+  //if (DMA1->LISR & DMA_FLAG_TEIF1_5) {
+  //  __NOP();
+  //}
+  /* USER CODE END DMA1_Stream1_IRQn 0 */
+  //HAL_DMA_IRQHandler(&hdma_hrtim1_a);
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+  // Re-enable "transfer complete" interrupt (gets disabled in HAL's default handler above)
+  //DMA1_Stream1->CR  |= DMA_IT_TC;
+  /* USER CODE END DMA1_Stream1_IRQn 1 */
+}
 
 /**
   * @brief This function handles TIM6 global interrupt, DAC1_CH1 and DAC1_CH2 underrun error interrupts.

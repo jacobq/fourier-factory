@@ -25,6 +25,7 @@
 /* USER CODE END 0 */
 
 HRTIM_HandleTypeDef hhrtim;
+DMA_HandleTypeDef hdma_hrtim1_a;
 
 /* HRTIM init function */
 void MX_HRTIM_Init(void)
@@ -50,9 +51,9 @@ void MX_HRTIM_Init(void)
     Error_Handler();
   }
   pTimerCfg.InterruptRequests = HRTIM_TIM_IT_NONE;
-  pTimerCfg.DMARequests = HRTIM_TIM_DMA_NONE;
-  pTimerCfg.DMASrcAddress = 0x0000;
-  pTimerCfg.DMADstAddress = 0x0000;
+  pTimerCfg.DMARequests = HRTIM_TIM_DMA_CMP1;
+  pTimerCfg.DMASrcAddress = (uint32_t)dac_buffer;
+  pTimerCfg.DMADstAddress = (uint32_t)&(GPIOE->ODR);
   pTimerCfg.DMASize = 0x1;
   pTimerCfg.HalfModeEnable = HRTIM_HALFMODE_DISABLED;
   pTimerCfg.StartOnSync = HRTIM_SYNCSTART_DISABLED;
@@ -131,6 +132,26 @@ void HAL_HRTIM_MspInit(HRTIM_HandleTypeDef* hrtimHandle)
   /* USER CODE END HRTIM1_MspInit 0 */
     /* HRTIM1 clock enable */
     __HAL_RCC_HRTIM1_CLK_ENABLE();
+  
+    /* HRTIM1 DMA Init */
+    /* HRTIM1_A Init */
+    hdma_hrtim1_a.Instance = DMA1_Stream1;
+    hdma_hrtim1_a.Init.Request = DMA_REQUEST_HRTIM_TIMER_A;
+    hdma_hrtim1_a.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    hdma_hrtim1_a.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_hrtim1_a.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_hrtim1_a.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_hrtim1_a.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_hrtim1_a.Init.Mode = DMA_NORMAL;
+    hdma_hrtim1_a.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+    hdma_hrtim1_a.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    if (HAL_DMA_Init(&hdma_hrtim1_a) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(hrtimHandle,hdmaTimerA,hdma_hrtim1_a);
+
   /* USER CODE BEGIN HRTIM1_MspInit 1 */
 
   /* USER CODE END HRTIM1_MspInit 1 */
@@ -176,6 +197,9 @@ void HAL_HRTIM_MspDeInit(HRTIM_HandleTypeDef* hrtimHandle)
   /* USER CODE END HRTIM1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_HRTIM1_CLK_DISABLE();
+
+    /* HRTIM1 DMA DeInit */
+    HAL_DMA_DeInit(hrtimHandle->hdmaTimerA);
   /* USER CODE BEGIN HRTIM1_MspDeInit 1 */
 
   /* USER CODE END HRTIM1_MspDeInit 1 */

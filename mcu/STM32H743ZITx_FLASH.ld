@@ -157,6 +157,20 @@ SECTIONS
     . = ALIGN(8);
   } >DTCMRAM
 
+  /*
+   Buffer used by DMA should be placed in SRAM1-SRAM3 so that it's in the "D2" domain
+   (from table 6)
+   0x30000000 - 0x3001FFFF SRAM1
+   0x30020000 - 0x3003FFFF SRAM2
+   0x30040000 - 0x30047FFF SRAM3
+   This script based on:
+   https://community.st.com/s/article/FAQ-DMA-is-not-working-on-STM32H7-devices
+  */
+  .dma_buffer : /* Space before ':' is critical */
+  {
+    *(.dma_buffer)
+  } >RAM_D2
+
   
 
   /* Remove information from the standard libraries */
