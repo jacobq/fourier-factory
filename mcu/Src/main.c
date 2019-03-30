@@ -74,14 +74,16 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+/*
   uint32_t i;
   //DMA_TypeDef* tmpDMA;
-  //#define _NOP do { asm { "nop"; } } while(0)
+
   #define DAC_BUFFER_SIZE 1024
   uint16_t dac_buffer[DAC_BUFFER_SIZE];
   for (i=0; i < DAC_BUFFER_SIZE; i++) {
 	  dac_buffer[i] = (i%2 == 0) ? 0x5555 : 0xAAAA;
   }
+*/
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -121,16 +123,19 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  // Start HRTIM channel A1 (OC)
-  HAL_HRTIM_SimpleOCStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1);
-  // Start HRTIM channel A2 (PWM)
-  HAL_HRTIM_SimplePWMStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA2);
+  // Code for starting TA1 (OC) & TA2 (PWM) outputs in "simple" mode
+  //HAL_HRTIM_SimpleOCStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1);
+  //HAL_HRTIM_SimplePWMStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA2);
+
+  // Code for starting TA1 & TA2 outputs in "advanced" mode
+  HAL_HRTIM_WaveformOutputStart(&hhrtim, HRTIM_OUTPUT_TA1 | HRTIM_OUTPUT_TA2);
+  HAL_HRTIM_WaveformCounterStart(&hhrtim, HRTIM_TIMERID_TIMER_A);
 
   while (1)
   {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
+	  __NOP();	// Just so we have something to set a breakpoint on / not optimize out
   }
   /* USER CODE END 3 */
 }
