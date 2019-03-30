@@ -35,7 +35,7 @@ void MX_TIM12_Init(void)
   htim12.Instance = TIM12;
   htim12.Init.Prescaler = 0;
   htim12.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim12.Init.Period = 199;
+  htim12.Init.Period = 10000;
   htim12.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim12.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim12) != HAL_OK)
@@ -55,20 +55,12 @@ void MX_TIM12_Init(void)
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-
-  //TIM12->CCR1 = 5000;
-  //HAL_TIM_OC_ConfigChannel(&htim12, sConfigOC, TIM_CHANNEL_1);
   if (HAL_TIM_PWM_ConfigChannel(&htim12, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
-
-  TIM12->CCR1 = 100;
-  //TIM12->CCR2 = 5000;
-  TIM12->CR1 |= TIM_CR1_CEN;
-  TIM12->CCER |= TIM_CCER_CC1E;
-
   HAL_TIM_MspPostInit(&htim12);
+
 }
 
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)

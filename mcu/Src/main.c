@@ -23,6 +23,7 @@
 #include "dac.h"
 #include "dma.h"
 #include "eth.h"
+#include "hrtim.h"
 #include "rng.h"
 #include "tim.h"
 #include "usart.h"
@@ -101,6 +102,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+/*
   MX_DMA_Init();
   MX_ETH_Init();
   MX_USART3_UART_Init();
@@ -108,6 +110,8 @@ int main(void)
   MX_RNG_Init();
   MX_TIM12_Init();
   MX_USB_OTG_FS_PCD_Init();
+*/
+  MX_HRTIM_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -116,26 +120,17 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //for (i=0; i < DAC_BUFFER_SIZE; i+=2) {
- //	    dac_buffer[i] = 0xaa;
- //	    dac_buffer[1+1] = 0x05;
- //	  }
+
+  // Start HRTIM channel A1 (OC)
+  HAL_HRTIM_SimpleOCStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1);
+  // Start HRTIM channel A2 (PWM)
+  HAL_HRTIM_SimplePWMStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA2);
 
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	DMA1->HIFCR = 0xFFFFFFFF;
-	DMA1->LIFCR = 0xFFFFFFFF;
-	//tmpDMA = DMA1;
-    HAL_DMA_Start(&hdma_dma_generator7, (uint32_t) dac_buffer, (uint32_t) &(GPIOE->ODR), DAC_BUFFER_SIZE);
-
-	// dummy delay
-	i = 0;
-    while (i < 25000) {
-    	i++;
-    }
   }
   /* USER CODE END 3 */
 }
@@ -197,11 +192,12 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_RNG
-                              |RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_HRTIM1|RCC_PERIPHCLK_USART3
+                              |RCC_PERIPHCLK_RNG|RCC_PERIPHCLK_USB;
   PeriphClkInitStruct.Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1;
   PeriphClkInitStruct.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
   PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+  PeriphClkInitStruct.Hrtim1ClockSelection = RCC_HRTIM1CLK_TIMCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
