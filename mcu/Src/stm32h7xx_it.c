@@ -211,6 +211,13 @@ void DMA1_Stream1_IRQHandler(void)
 
   // Manually clear half-transfer & transfer complete flags
   DMA1->LIFCR |= DMA_LIFCR_CHTIF1 | DMA_LIFCR_CTCIF1;
+
+  // FIXME: cheating
+  //DMA1_Stream1->M0AR++;
+  //if (DMA1_Stream1->M0AR > dac_buffer[DAC_BUFFER_SIZE - 1]) {
+  // DMA1_Stream1->M0AR = dac_buffer;
+  //}
+
   DMA1_Stream1->CR |= DMA_SxCR_EN;
 
   // Quick, manual test for transfer error flag

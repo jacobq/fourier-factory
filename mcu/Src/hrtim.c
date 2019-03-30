@@ -54,7 +54,8 @@ void MX_HRTIM_Init(void)
   pTimerCfg.DMARequests = HRTIM_TIM_DMA_CMP1;
   pTimerCfg.DMASrcAddress = (uint32_t)dac_buffer;
   pTimerCfg.DMADstAddress = (uint32_t)&(GPIOE->ODR);
-  pTimerCfg.DMASize = 0x1;
+  //pTimerCfg.DMASize = 0x1;
+  pTimerCfg.DMASize = 16;
   pTimerCfg.HalfModeEnable = HRTIM_HALFMODE_DISABLED;
   pTimerCfg.StartOnSync = HRTIM_SYNCSTART_DISABLED;
   pTimerCfg.ResetOnSync = HRTIM_SYNCRESET_DISABLED;
