@@ -42,7 +42,7 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
-  pTimeBaseCfg.Period = 200;
+  pTimeBaseCfg.Period = 5;
   pTimeBaseCfg.RepetitionCounter = 0x00;
   pTimeBaseCfg.PrescalerRatio = HRTIM_PRESCALERRATIO_DIV1;
   pTimeBaseCfg.Mode = HRTIM_MODE_CONTINUOUS;
@@ -55,7 +55,7 @@ void MX_HRTIM_Init(void)
   pTimerCfg.DMASrcAddress = (uint32_t)dac_buffer;
   pTimerCfg.DMADstAddress = (uint32_t)&(GPIOE->ODR);
   //pTimerCfg.DMASize = 0x1;
-  pTimerCfg.DMASize = 16;
+  pTimerCfg.DMASize = DAC_BUFFER_SIZE;
   pTimerCfg.HalfModeEnable = HRTIM_HALFMODE_DISABLED;
   pTimerCfg.StartOnSync = HRTIM_SYNCSTART_DISABLED;
   pTimerCfg.ResetOnSync = HRTIM_SYNCRESET_DISABLED;
@@ -76,12 +76,12 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
-  pCompareCfg.CompareValue = 49;
+  pCompareCfg.CompareValue = 1;
   if (HAL_HRTIM_WaveformCompareConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_1, &pCompareCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  pCompareCfg.CompareValue = 99;
+  pCompareCfg.CompareValue = 2;
   pCompareCfg.AutoDelayedMode = HRTIM_AUTODELAYEDMODE_REGULAR;
   pCompareCfg.AutoDelayedTimeout = 0x0000;
 
@@ -89,6 +89,7 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
+  /*
   pCompareCfg.CompareValue = 149;
   if (HAL_HRTIM_WaveformCompareConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_3, &pCompareCfg) != HAL_OK)
   {
@@ -101,6 +102,7 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
+*/
   pOutputCfg.Polarity = HRTIM_OUTPUTPOLARITY_HIGH;
   pOutputCfg.SetSource = HRTIM_OUTPUTSET_TIMCMP1;
   pOutputCfg.ResetSource = HRTIM_OUTPUTRESET_TIMCMP2;

@@ -207,17 +207,13 @@ void SysTick_Handler(void)
 void DMA1_Stream1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
-  //__NOP();
-
+  //HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength);
   // Manually clear half-transfer & transfer complete flags
   DMA1->LIFCR |= DMA_LIFCR_CHTIF1 | DMA_LIFCR_CTCIF1;
 
-  // FIXME: cheating
-  //DMA1_Stream1->M0AR++;
-  //if (DMA1_Stream1->M0AR > dac_buffer[DAC_BUFFER_SIZE - 1]) {
-  // DMA1_Stream1->M0AR = dac_buffer;
-  //}
-
+  // Go again
+  DMA1_Stream1->M0AR = dac_buffer;
+  DMA1_Stream1->NDTR = DAC_BUFFER_SIZE;
   DMA1_Stream1->CR |= DMA_SxCR_EN;
 
   // Quick, manual test for transfer error flag
