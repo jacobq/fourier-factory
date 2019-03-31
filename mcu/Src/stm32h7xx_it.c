@@ -207,24 +207,18 @@ void SysTick_Handler(void)
 void DMA1_Stream1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
-  //HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength);
-  // Manually clear half-transfer & transfer complete flags
-  DMA1->LIFCR |= DMA_LIFCR_CHTIF1 | DMA_LIFCR_CTCIF1;
+  // Note: Not generating half-transfer interrupts so we skip the check
+  // Transfer complete --> start another one
+  if (DMA1->LISR & DMA_FLAG_TCIF1_5) {
+    DMA1->LIFCR |= DMA_LIFCR_CTCIF1;
+    DMA1_Stream1->M0AR = (uint32_t)dac_buffer;
+    DMA1_Stream1->NDTR = DAC_BUFFER_SIZE;
+    DMA1_Stream1->CR |= DMA_SxCR_EN;
+  }
 
-  // Go again
-  DMA1_Stream1->M0AR = dac_buffer;
-  DMA1_Stream1->NDTR = DAC_BUFFER_SIZE;
-  DMA1_Stream1->CR |= DMA_SxCR_EN;
-
-  // Quick, manual test for transfer error flag
-  //if (DMA1->LISR & DMA_FLAG_TEIF1_5) {
-  //  __NOP();
-  //}
   /* USER CODE END DMA1_Stream1_IRQn 0 */
-  //HAL_DMA_IRQHandler(&hdma_hrtim1_a);
+  HAL_DMA_IRQHandler(&hdma_hrtim1_a);
   /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
-  // Re-enable "transfer complete" interrupt (gets disabled in HAL's default handler above)
-  //DMA1_Stream1->CR  |= DMA_IT_TC;
   /* USER CODE END DMA1_Stream1_IRQn 1 */
 }
 

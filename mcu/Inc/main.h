@@ -76,6 +76,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define DATA_2_Pin GPIO_PIN_2
+#define DATA_2_GPIO_Port GPIOE
+#define DATA_3_Pin GPIO_PIN_3
+#define DATA_3_GPIO_Port GPIOE
+#define DATA_4_Pin GPIO_PIN_4
+#define DATA_4_GPIO_Port GPIOE
+#define DATA_5_Pin GPIO_PIN_5
+#define DATA_5_GPIO_Port GPIOE
+#define DATA_6_Pin GPIO_PIN_6
+#define DATA_6_GPIO_Port GPIOE
 #define USER_Btn_Pin GPIO_PIN_13
 #define USER_Btn_GPIO_Port GPIOC
 #define MCO_Pin GPIO_PIN_0
@@ -92,6 +102,24 @@ void Error_Handler(void);
 #define RMII_RXD0_GPIO_Port GPIOC
 #define RMII_RXD1_Pin GPIO_PIN_5
 #define RMII_RXD1_GPIO_Port GPIOC
+#define DATA_7_Pin GPIO_PIN_7
+#define DATA_7_GPIO_Port GPIOE
+#define DATA_8_Pin GPIO_PIN_8
+#define DATA_8_GPIO_Port GPIOE
+#define DATA_9_Pin GPIO_PIN_9
+#define DATA_9_GPIO_Port GPIOE
+#define DATA_10_Pin GPIO_PIN_10
+#define DATA_10_GPIO_Port GPIOE
+#define DATA_11_Pin GPIO_PIN_11
+#define DATA_11_GPIO_Port GPIOE
+#define DATA_12_Pin GPIO_PIN_12
+#define DATA_12_GPIO_Port GPIOE
+#define DATA_13_Pin GPIO_PIN_13
+#define DATA_13_GPIO_Port GPIOE
+#define DATA_14_Pin GPIO_PIN_14
+#define DATA_14_GPIO_Port GPIOE
+#define DATA_15_Pin GPIO_PIN_15
+#define DATA_15_GPIO_Port GPIOE
 #define RMII_TXD1_Pin GPIO_PIN_13
 #define RMII_TXD1_GPIO_Port GPIOB
 #define TIM12_CH1_LD3_RED_Pin GPIO_PIN_14

@@ -119,21 +119,19 @@ int main(void)
   //RCC->AHB2ENR |= RCC_AHB2ENR_D2SRAM3EN;
 
   for (i=0; i < DAC_BUFFER_SIZE; i++) {
-	  dac_buffer[i] = (i%2 == 0) ? 0x5555 : 0xAAAA;
+	  dac_buffer[i] = i;
   }
 
   // Code for starting TA1 (OC) & TA2 (PWM) outputs in "simple" mode
   //HAL_HRTIM_SimpleOCStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA1);
   //HAL_HRTIM_SimplePWMStart(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_OUTPUT_TA2);
 
-  // Code for starting TA1 & TA2 outputs in "advanced" mode
-  HAL_HRTIM_WaveformOutputStart(&hhrtim, HRTIM_OUTPUT_TA1 | HRTIM_OUTPUT_TA2);
-  //HAL_HRTIM_WaveformCounterStart(&hhrtim, HRTIM_TIMERID_TIMER_A);
+  __disable_irq();
+  // Code for starting TA1 outputs in "advanced" mode w/ DMA
+  HAL_HRTIM_WaveformOutputStart(&hhrtim, HRTIM_OUTPUT_TA1);
   HAL_HRTIM_WaveformCounterStart_DMA(&hhrtim, HRTIM_TIMERID_TIMER_A);
-
-  // dummy code so that DMA1 expression is defined for debug watch tool
-  //i = (uint32_t)DMA1;
-
+  DMA1_Stream1->CR &= ~DMA_IT_HT; // disable half-transfer complete interrupts
+  __enable_irq();
 
   while (1)
   {
@@ -207,7 +205,7 @@ void SystemClock_Config(void)
   PeriphClkInitStruct.Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1;
   PeriphClkInitStruct.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
   PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
-  PeriphClkInitStruct.Hrtim1ClockSelection = RCC_HRTIM1CLK_TIMCLK;
+  PeriphClkInitStruct.Hrtim1ClockSelection = RCC_HRTIM1CLK_CPUCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
