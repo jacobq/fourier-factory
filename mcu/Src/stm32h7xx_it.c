@@ -208,13 +208,20 @@ void DMA1_Stream1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
   // Note: Not generating half-transfer interrupts so we skip the check
+
   // Transfer complete --> start another one
   if (DMA1->LISR & DMA_FLAG_TCIF1_5) {
-    DMA1->LIFCR |= DMA_LIFCR_CTCIF1;
+    DMA1->LIFCR |= DMA_LIFCR_CTCIF1 | DMA_LIFCR_CHTIF1;
     DMA1_Stream1->M0AR = (uint32_t)dac_buffer;
     DMA1_Stream1->NDTR = DAC_BUFFER_SIZE;
     DMA1_Stream1->CR |= DMA_SxCR_EN;
   }
+
+  // See if there are any other flags (and break for debug
+  if (DMA1->LISR) {
+    __NOP();
+  }
+
 
   /* USER CODE END DMA1_Stream1_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_hrtim1_a);

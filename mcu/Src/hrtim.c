@@ -42,7 +42,7 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
-  pTimeBaseCfg.Period = 32;
+  pTimeBaseCfg.Period = 18;
   pTimeBaseCfg.RepetitionCounter = 0x00;
   pTimeBaseCfg.PrescalerRatio = HRTIM_PRESCALERRATIO_DIV1;
   pTimeBaseCfg.Mode = HRTIM_MODE_CONTINUOUS;
@@ -51,7 +51,7 @@ void MX_HRTIM_Init(void)
     Error_Handler();
   }
   pTimerCfg.InterruptRequests = HRTIM_TIM_IT_NONE;
-  pTimerCfg.DMARequests = HRTIM_TIM_DMA_SET1|HRTIM_TIM_DMA_RST1;
+  pTimerCfg.DMARequests = HRTIM_TIM_DMA_SET1;
   pTimerCfg.DMASrcAddress = (uint32_t)dac_buffer;
   pTimerCfg.DMADstAddress = (uint32_t)&(GPIOE->ODR);
   pTimerCfg.DMASize = 1024;
@@ -75,12 +75,12 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
-  pCompareCfg.CompareValue = 15;
+  pCompareCfg.CompareValue = 9;
   if (HAL_HRTIM_WaveformCompareConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_1, &pCompareCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  pCompareCfg.CompareValue = 31;
+  pCompareCfg.CompareValue = 17;
   pCompareCfg.AutoDelayedMode = HRTIM_AUTODELAYEDMODE_REGULAR;
   pCompareCfg.AutoDelayedTimeout = 0x0000;
 
@@ -126,7 +126,10 @@ void HAL_HRTIM_MspInit(HRTIM_HandleTypeDef* hrtimHandle)
     hdma_hrtim1_a.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
     hdma_hrtim1_a.Init.Mode = DMA_NORMAL;
     hdma_hrtim1_a.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-    hdma_hrtim1_a.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    hdma_hrtim1_a.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+    hdma_hrtim1_a.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+    hdma_hrtim1_a.Init.MemBurst = DMA_MBURST_INC8;
+    hdma_hrtim1_a.Init.PeriphBurst = DMA_PBURST_INC8;
     if (HAL_DMA_Init(&hdma_hrtim1_a) != HAL_OK)
     {
       Error_Handler();
